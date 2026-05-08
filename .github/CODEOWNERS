@@ -1,0 +1,33 @@
+# Portage CODEOWNERS
+#
+# Order matters — the LAST matching pattern takes precedence.
+# Replace the placeholder handles with real maintainers before publishing.
+
+# Default owner for everything
+*                                       @geoffsdesk
+
+# Skill-specific owners (uncomment and fill in as you grow contributors)
+# /skills/portage-orchestrator/         @REPLACE_WITH_ORCHESTRATOR_OWNER
+# /skills/eks-discovery/                @REPLACE_WITH_DISCOVERY_OWNER
+# /skills/migration-assessment/         @REPLACE_WITH_ASSESSMENT_OWNER
+# /skills/gke-landing-zone/             @REPLACE_WITH_LZ_OWNER
+# /skills/network-translation/          @REPLACE_WITH_NET_OWNER
+# /skills/identity-translation/         @REPLACE_WITH_IDENTITY_OWNER
+# /skills/workload-translation/         @REPLACE_WITH_WORKLOAD_OWNER
+# /skills/storage-translation/          @REPLACE_WITH_STORAGE_OWNER
+# /skills/registry-migration/           @REPLACE_WITH_REGISTRY_OWNER
+# /skills/observability-translation/    @REPLACE_WITH_OBS_OWNER
+# /skills/data-migration/               @REPLACE_WITH_DATA_OWNER
+# /skills/traffic-cutover/              @REPLACE_WITH_CUTOVER_OWNER
+# /skills/rollback-playbook/            @REPLACE_WITH_ROLLBACK_OWNER
+# /skills/post-migration-ops/           @REPLACE_WITH_OPS_OWNER
+
+# Reference content
+/reference/                             @geoffsdesk
+/reference/lessons-from-the-field.md    @geoffsdesk
+/reference/sources.md                   @geoffsdesk
+
+# CI / repo meta
+/.github/                               @geoffsdesk
+/SECURITY.md                            @geoffsdesk
+/manifest.json                          @geoffsdesk

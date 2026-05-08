@@ -1,0 +1,44 @@
+{
+  "name": "portage",
+  "version": "0.1.0",
+  "description": "Agent-driven EKS to GKE migration. PSO-grade outcomes, no PSO required.",
+  "homepage": "https://github.com/geoffsdesk/portage",
+  "license": "Apache-2.0",
+  "authors": [
+    "The Portage Authors"
+  ],
+  "keywords": [
+    "kubernetes",
+    "gke",
+    "eks",
+    "migration",
+    "sre",
+    "platform-engineering",
+    "agents",
+    "skills"
+  ],
+  "skills": [
+    { "name": "portage-orchestrator",       "path": "skills/portage-orchestrator" },
+    { "name": "eks-discovery",              "path": "skills/eks-discovery" },
+    { "name": "migration-assessment",       "path": "skills/migration-assessment" },
+    { "name": "gke-landing-zone",           "path": "skills/gke-landing-zone" },
+    { "name": "network-translation",        "path": "skills/network-translation" },
+    { "name": "identity-translation",       "path": "skills/identity-translation" },
+    { "name": "workload-translation",       "path": "skills/workload-translation" },
+    { "name": "storage-translation",        "path": "skills/storage-translation" },
+    { "name": "registry-migration",         "path": "skills/registry-migration" },
+    { "name": "observability-translation",  "path": "skills/observability-translation" },
+    { "name": "data-migration",             "path": "skills/data-migration" },
+    { "name": "traffic-cutover",            "path": "skills/traffic-cutover" },
+    { "name": "rollback-playbook",          "path": "skills/rollback-playbook" },
+    { "name": "post-migration-ops",         "path": "skills/post-migration-ops" }
+  ],
+  "phases": [
+    { "id": "P0", "name": "Program",     "skills": ["portage-orchestrator"] },
+    { "id": "P1", "name": "Discover",    "skills": ["eks-discovery", "migration-assessment"] },
+    { "id": "P2", "name": "Design",      "skills": ["gke-landing-zone", "network-translation", "identity-translation"] },
+    { "id": "P3", "name": "Translate",   "skills": ["workload-translation", "storage-translation", "registry-migration", "observability-translation"] },
+    { "id": "P4", "name": "Cut over",    "skills": ["data-migration", "traffic-cutover", "rollback-playbook"] },
+    { "id": "P5", "name": "Operate",     "skills": ["post-migration-ops"] }
+  ]
+}

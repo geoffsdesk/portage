@@ -1,0 +1,42 @@
+# Portage runs
+
+portage-output/
+*.local.md
+*.local.yaml
+
+# Terraform
+
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+
+# Editors / OS
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets
+
+*.pem
+*.key
+*.crt
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+
+dist/
+build/
+node_modules/
+__pycache__/
+*.pyc
