@@ -324,9 +324,9 @@ This is the document the official cloud.google.com series can't write — vendor
 **Owning skill:** network-translation
 **Sources:**
 - kubernetes-sigs/aws-load-balancer-controller issue #2949, 2023 — <https://github.com/kubernetes-sigs/aws-load-balancer-controller/issues/2949>
-- AWS Networking & Content Delivery Blog, *AWS LBC adds GA support for Kubernetes Gateway API*, 2026-03 — <https://aws.amazon.com/blogs/networking-and-content-delivery/aws-load-balancer-controller-adds-general-availability-support-for-kubernetes-gateway-api/>
+- AWS Networking & Content Delivery Blog, *AWS LBC adds GA support for Kubernetes Gateway API* (shipped in AWS Load Balancer Controller **v3.0.0**, 2026) — <https://aws.amazon.com/blogs/networking-and-content-delivery/aws-load-balancer-controller-adds-general-availability-support-for-kubernetes-gateway-api/>
 
-**What practitioners report.** AWS itself moved its LB controller from annotations to CRDs because annotation strings could not represent the configuration. Some `alb.ingress.kubernetes.io/*` annotations encode shapes (auth flows, conditional actions, group ordering) that don't fit Gateway API field semantics directly.
+**What practitioners report.** AWS itself moved its LB controller from annotations to type-safe CRDs because annotation strings could not represent the configuration; GA Gateway API support landed in **v3.0.0 (2026)**, handling both L4 (NLB) and L7 (ALB) with automatic ACM certificate discovery and cross-namespace routing. Some `alb.ingress.kubernetes.io/*` annotations encode shapes (auth flows, conditional actions, group ordering) that don't fit Gateway API field semantics directly.
 
 **What to do.** Already covered in `network-translation` and `reference/api-translation.md`. Reinforce: any annotation in the source that doesn't appear in the api-translation table is an escalation, not a heuristic.
 
@@ -400,17 +400,18 @@ This is the document the official cloud.google.com series can't write — vendor
 
 ## 8. Service mesh re-platforms
 
-### LFF-29 — App Mesh is retiring 2026-09-30; the migration path is Istio (or VPC Lattice / Service Connect on AWS)
+### LFF-29 — App Mesh is retiring 2026-09-30; AWS's own path is VPC Lattice / ECS Service Connect — for a GKE move the target is Cloud Service Mesh
 
 **Severity:** 2
 **Owning skill:** workload-translation (escalation)
 **Sources:**
 - Steef-Jan Wiggers (InfoQ), *AWS Sunsets More Services, Including AWS App Mesh*, 2024 — <https://www.infoq.com/news/2024/10/aws-retires-services/>
+- AWS Containers Blog, *Migrating from AWS App Mesh to Amazon VPC Lattice*, 2024 — <https://aws.amazon.com/blogs/containers/migrating-from-aws-app-mesh-to-amazon-vpc-lattice/>
 - Tetrate (Jimmy Song), *Migrating from AWS App Mesh to Istio: A Comprehensive Guide*, 2024 — <https://tetrate.io/blog/migrating-from-aws-app-mesh-to-istio-a-comprehensive-guide>
 
-**What practitioners report.** AWS announced App Mesh retirement on 2026-09-30 (verify against current AWS notices). Tetrate's guide notes that Virtual Nodes and Virtual Routers do not translate one-to-one to Istio — automated translation tooling helps, but the rewrite is real work.
+**What practitioners report.** AWS announced App Mesh retirement on 2026-09-30, with no new-customer onboarding since 2024-09-24 (verify against current AWS notices). Note the distinction the official guidance draws: AWS itself steers users to **Amazon VPC Lattice** (for EKS) or **Amazon ECS Service Connect** (for ECS) — *not* Istio. Istio is the third-party / Kubernetes-native alternative (per Tetrate, Solo.io), and on GKE its managed form is **Cloud Service Mesh** (the former Anthos Service Mesh, GA 2024). Tetrate's guide notes that App Mesh Virtual Nodes and Virtual Routers do not translate one-to-one to Istio — automated tooling helps, but the rewrite is real work.
 
-**What to do.** In `migration-assessment`, App Mesh in scope is a hard escalation: re-platform to Anthos Service Mesh (managed Istio) is its own mini-project. Surface the effort estimate as a separate line item with explicit human sign-off.
+**What to do.** In `migration-assessment`, App Mesh in scope is a hard escalation: re-platform to **Cloud Service Mesh** (managed Istio on GKE) is its own mini-project. Do not assume Istio is the AWS-blessed exit — it is the GKE-side target, while AWS's own path is VPC Lattice / ECS Service Connect. Surface the effort estimate as a separate line item with explicit human sign-off.
 
 ### LFF-30 — Confluent migrated CNI (to Cilium) live across AWS/Azure/GCP; needed cluster-by-cluster sequencing
 
@@ -539,6 +540,7 @@ This is the document the official cloud.google.com series can't write — vendor
 |---|---|---|---|
 | Aleman, Alvaro & Mehta, Nimisha (Confluent) | Confluent's Multi-Cloud Journey to Cilium | 2024 | <https://www.youtube.com/watch?v=vOSiVeBXYpM> |
 | AWS Architecture Blog | How Salesforce migrated from Cluster Autoscaler to Karpenter | 2024 | <https://aws.amazon.com/blogs/architecture/how-salesforce-migrated-from-cluster-autoscaler-to-karpenter-across-their-fleet-of-1000-eks-clusters/> |
+| AWS Containers Blog | Migrating from AWS App Mesh to Amazon VPC Lattice | 2024 | <https://aws.amazon.com/blogs/containers/migrating-from-aws-app-mesh-to-amazon-vpc-lattice/> |
 | AWS SDK for Java docs | Set the JVM TTL for DNS name lookups | ongoing | <https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/jvm-ttl-dns.html> |
 | AWS Networking & Content Delivery Blog | AWS LBC adds GA support for Kubernetes Gateway API | 2026 | <https://aws.amazon.com/blogs/networking-and-content-delivery/aws-load-balancer-controller-adds-general-availability-support-for-kubernetes-gateway-api/> |
 | airbytehq | Issue #29333: Missing replication slot caused by Azure PG Flex Server failover | 2023 | <https://github.com/airbytehq/airbyte/issues/29333> |

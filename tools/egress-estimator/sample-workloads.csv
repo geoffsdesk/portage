@@ -1,0 +1,5 @@
+workload,gb_per_day,window_days,seed_tib
+payments-api,120,21,0
+orders-service,60,21,0
+analytics-cdc,400,30,8
+media-uploads,250,21,2
