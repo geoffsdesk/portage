@@ -244,6 +244,8 @@ For each KSA in the ledger, before deploying any application workload:
 - **Argo CD and other charts that overwrite the projected token mount** silently break IRSA-style auth for ~40 minutes after install. Check `automountServiceAccountToken` and projected-token-volume integrity in chart templates. See [LFF-07](../../reference/lessons-from-the-field.md#lff-07--argo-cd-pods-lose-iam-access-for-40-minutes-after-first-install).
 - **Don't forget to block egress to `169.254.169.254`** from non-system namespaces — without it, a misconfigured WI binding silently inherits the node's GCE service account. See [LFF-08](../../reference/lessons-from-the-field.md#lff-08--on-gke-you-must-explicitly-block-169254169254-to-prevent-pods-grabbing-node-level-credentials).
 - **Cloud SQL Auth Proxy under WI flaps with `NOT_AUTHORIZED`** due to token-refresh races. Validation must include sustained-traffic tests, not just single-request smoke. See [LFF-14](../../reference/lessons-from-the-field.md#lff-14--cloud-sql-proxy-randomly-drops-with-not_authorized-due-to-token-refresh-races).
+- **AWS STS trusts Google identities natively.** No per-cluster OIDC provider is required for AWS STS to trust GKE Workload Identity. See [LFF-09](../../reference/lessons-from-the-field.md#lff-09--aws-sts-trusts-google-identities-natively-no-per-cluster-oidc-provider-needed).
+- **Stale gke-metadata-server skipped during auto-upgrade.** If `gke-metadata-server` DaemonSet is skipped during auto-upgrade, auth and kube-dns can break. See [LFF-10](../../reference/lessons-from-the-field.md#lff-10--stale-gke-metadata-server-skipped-during-auto-upgrade-can-break-kube-dns-and-cicd).
 
 ## References
 

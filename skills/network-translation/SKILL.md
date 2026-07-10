@@ -432,6 +432,9 @@ Render `04-network-translation/manifests/` with one file per Gateway and HTTPRou
 - **ManagedCertificate doesn't work with nginx-ingress.** Decision point: Gateway+ManagedCertificate, or nginx-ingress+cert-manager. Make it up-front. See [LFF-27](../../reference/lessons-from-the-field.md#lff-27--managedcertificate-doesnt-work-with-nginx-ingress-cert-manager-is-the-alternative).
 - **Gateway API on GKE expects a pre-shared SslCertificate**, not a ManagedCertificate CR. When targeting Gateway API, plan TLS via Certificate Manager from the start. See [LFF-28](../../reference/lessons-from-the-field.md#lff-28--gateway-api-on-gke-requires-pre-shared-compute-sslcertificate-not-a-managedcertificate-cr).
 - **ALB `group.name` semantics don't translate to Gateway API.** Rebuild as one Gateway with multiple HTTPRoutes. See [LFF-20](../../reference/lessons-from-the-field.md#lff-20--alb-groupname-annotation-creates-a-new-alb-instead-of-mutating-the-existing-one).
+- **Istio Gateway static IP port collisions.** Each Istio Gateway creates its own LB Service; shared static IPs collide on port 15021. See [LFF-21](../../reference/lessons-from-the-field.md#lff-21--each-istio-gateway-resource-creates-its-own-lb-service-shared-static-ips-collide-on-port-15021).
+- **AWS LBC CRD vs Gateway API mismatch.** AWS LBC v3.0.0 moved to CRDs; many EKS-only fields do not fit Gateway API directly without restructuring. See [LFF-22](../../reference/lessons-from-the-field.md#lff-22--aws-lbc-moved-off-annotations-to-crds-many-eks-only-fields-dont-fit-gateway-api).
+- **Confluent live CNI migration.** Migrating CNI (to Cilium) live across clouds requires strict cluster-by-cluster sequencing. See [LFF-30](../../reference/lessons-from-the-field.md#lff-30--confluent-migrated-cni-to-cilium-live-across-awsazuregcp-needed-cluster-by-cluster-sequencing).
 
 ## References
 

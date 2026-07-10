@@ -282,6 +282,8 @@ Also render `migration-summary.pdf` if the user wants a board-ready version.
 - **Forgetting NAT gateway and load-balancer cost on AWS side.** Even with workloads scaled to 0, AWS NAT and ALB costs continue. Decommission them on schedule.
 - **GKE bin-packing post-migration commonly drops to <40% utilization** as teams arrive from Karpenter-on-EKS and NAP runs many small node pools. Use `optimize-utilization` profile and consolidate node pools. See [LFF-19](../../reference/lessons-from-the-field.md#lff-19--gke-bin-packing-post-migration-commonly-drops-to-40-node-utilization).
 - **Autopilot per-pod billing scales badly at high-volume bursty workloads.** Model Autopilot vs Standard cost on actual workload shape before defaulting. See [LFF-34](../../reference/lessons-from-the-field.md#lff-34--autopilot-pay-per-request-billing-exploded-at-scale-for-one-team-they-reversed-to-eks-with-karpenter).
+- **Autopilot POC cost.** Trivial CPU workloads on Autopilot can incur unexpected baseline sizing costs (~$1k/mo in POCs). Verify node sizing vs Autopilot minimums. See [LFF-35](../../reference/lessons-from-the-field.md#lff-35--autopilot-poc-cost-1kmo-for-trivial-cpu-workloads-in-one-teams-measurement).
+- **PB scale shadow-reads and dedicated interconnect.** Dedicated cloud interconnect is roughly 5× cheaper than open-internet egress for PB volumes. See [LFF-02](../../reference/lessons-from-the-field.md#lff-02--sifts-petabyte-awsgcp-move-dual-wrote-and-shadow-read-for-weeks).
 - **HPA + VPA on the same metric is unsupported and thrashes.** Move VPA to recommend mode, or HPA to a custom metric. See [LFF-18](../../reference/lessons-from-the-field.md#lff-18--hpa--vpa-on-the-same-metric-thrashes-upstream-warns-explicitly).
 
 ## References

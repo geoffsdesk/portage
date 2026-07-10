@@ -50,6 +50,7 @@ import sys
 from dataclasses import dataclass, field
 
 GIB_PER_TIB = 1024
+MAX_CSV_ROWS = 10_000
 
 
 @dataclass
@@ -61,6 +62,11 @@ class Workload:
     total_gb: float = field(init=False)
 
     def __post_init__(self):
+        if self.gb_per_day < 0 or self.window_days <= 0 or self.seed_tib < 0:
+            raise ValueError(
+                f"Invalid numeric limits for workload '{self.name}': "
+                f"gb_per_day>=0, window_days>0, seed_tib>=0 required."
+            )
         self.total_gb = (self.gb_per_day * self.window_days) + (self.seed_tib * GIB_PER_TIB)
 
 
@@ -74,12 +80,17 @@ def load_workloads(path, default_window):
         for row in reader:
             if not row.get("workload"):
                 continue
-            out.append(Workload(
-                name=row["workload"].strip(),
-                gb_per_day=float(row["gb_per_day"]),
-                window_days=int(row["window_days"]) if row.get("window_days") else default_window,
-                seed_tib=float(row["seed_tib"]) if row.get("seed_tib") else 0.0,
-            ))
+            if len(out) >= MAX_CSV_ROWS:
+                sys.exit(f"error: CSV exceeds maximum allowed rows ({MAX_CSV_ROWS})")
+            try:
+                out.append(Workload(
+                    name=row["workload"].strip(),
+                    gb_per_day=float(row["gb_per_day"]),
+                    window_days=int(row["window_days"]) if row.get("window_days") else default_window,
+                    seed_tib=float(row["seed_tib"]) if row.get("seed_tib") else 0.0,
+                ))
+            except (ValueError, TypeError) as e:
+                sys.exit(f"error parsing row for workload '{row.get('workload')}': {e}")
     if not out:
         sys.exit("error: no workloads found in input")
     return out
@@ -101,7 +112,7 @@ def estimate(workloads, internet_rate, cci_monthly, cci_nrc):
 
     internet_total = total_gb * internet_rate
     cci_total = cci_monthly * months + cci_nrc
-    break_even_gb = (cci_monthly * months + cci_nrc) / internet_rate if internet_rate else float("inf")
+    break_even_gb = (cci_monthly * months + cci_nrc) / internet_rate if internet_rate > 0 else float("inf")
 
     rows = []
     for w in workloads:

@@ -162,6 +162,7 @@ Also render `02-assessment/blockers.md` — a self-contained checklist of every 
 - **Treating IRSA as a 1:1 to WI.** It usually is; the few that aren't are exactly the ones that bite. Score each role.
 - **Underestimating data moves.** Heterogeneous data store changes are projects of their own. If the user wants to migrate the K8s fleet but keep AWS RDS, that's a valid choice; surface it.
 - **Listing risks without guardrails.** A risk without a guardrail is a guess. Every risk gets a measurable guardrail.
+- **At PB scale, plan multi-week shadow-reads.** For data systems above ~1 TiB with strict consistency requirements, plan dual-write + shadow-read for weeks before switching reads. See [LFF-02](../../reference/lessons-from-the-field.md#lff-02--sifts-petabyte-awsgcp-move-dual-wrote-and-shadow-read-for-weeks).
 
 ## References
 

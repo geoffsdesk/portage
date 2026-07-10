@@ -1,10 +1,12 @@
 {
   "name": "portage",
-  "version": "0.1.0",
+  "version": "1.0.0-rc1",
   "description": "Agent-driven EKS to GKE migration. PSO-grade outcomes, no PSO required.",
   "homepage": "https://github.com/geoffsdesk/portage",
   "license": "Apache-2.0",
   "authors": [
+    "Geoff Anderson (@geoffsdesk)",
+    "Rohini Rajaram (@rohinikrishna05)",
     "The Portage Authors"
   ],
   "keywords": [
@@ -32,6 +34,9 @@
     { "name": "traffic-cutover",            "path": "skills/traffic-cutover" },
     { "name": "rollback-playbook",          "path": "skills/rollback-playbook" },
     { "name": "post-migration-ops",         "path": "skills/post-migration-ops" }
+  ],
+  "tools": [
+    { "name": "egress-estimator",           "path": "tools/egress-estimator" }
   ],
   "phases": [
     { "id": "P0", "name": "Program",     "skills": ["portage-orchestrator"] },

@@ -261,6 +261,7 @@ gcloud container clusters describe <cluster> --location <region> \
 - **Operator CRDs missing.** If an operator (e.g., Postgres operator) is in EKS, you have to install it on GKE before its CRs apply. Surface in the workload-translation phase, not at apply time.
 - **Karpenter NodePools do not translate to GKE.** Capture taints/labels and rebuild as GKE node pools (or NAP rules) in `gke-landing-zone`. The community Karpenter-on-GCP provider exists but is not production-ready. See [LFF-16](../../reference/lessons-from-the-field.md#lff-16--karpenter-on-gcp-exists-but-is-preview-grade-treat-the-parity-as-a-re-platform).
 - **Workloads tuned to Karpenter's seconds-class scale-up will queue under NAP.** Increase HPA `minReplicas` and tune target utilization down for these workloads. See [LFF-17](../../reference/lessons-from-the-field.md#lff-17--salesforce-karpenter-migration-brought-scaling-latency-from-minutes-to-seconds).
+- **App Mesh retirement.** App Mesh retires 2026-09-30; target for a GKE move is Cloud Service Mesh. See [LFF-29](../../reference/lessons-from-the-field.md#lff-29--app-mesh-is-retiring-2026-09-30-awss-own-path-is-vpc-lattice--ecs-service-connect--for-a-gke-move-the-target-is-cloud-service-mesh).
 
 ## References
 

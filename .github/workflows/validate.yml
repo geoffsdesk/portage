@@ -2,9 +2,9 @@ name: validate
 
 on:
   push:
-    branches: [main]
+    branches: [main, release/*]
   pull_request:
-    branches: [main]
+    branches: [main, release/*]
 
 jobs:
   validate:
@@ -12,99 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate skill frontmatter
-        run: |
-          python3 - <<'PY'
-          import os, re, sys
-          fm = re.compile(r'^---\nname: ([^\n]+)\ndescription: (.+?)\n---', re.DOTALL)
-          errors = []
-          skill_count = 0
-          for root, _, files in os.walk('skills'):
-              for f in files:
-                  if f != 'SKILL.md':
-                      continue
-                  skill_count += 1
-                  p = os.path.join(root, f)
-                  body = open(p).read()
-                  m = fm.match(body)
-                  if not m:
-                      errors.append(f'{p}: invalid or missing frontmatter')
-                      continue
-                  name = m.group(1).strip()
-                  desc = m.group(2).strip()
-                  expected = os.path.basename(os.path.dirname(p))
-                  if name != expected:
-                      errors.append(f'{p}: frontmatter name "{name}" != folder "{expected}"')
-                  if len(desc) < 80:
-                      errors.append(f'{p}: description too short ({len(desc)} chars)')
-                  if len(desc) > 1024:
-                      errors.append(f'{p}: description too long ({len(desc)} chars)')
-          print(f'Validated {skill_count} skill files.')
-          if errors:
-              for e in errors: print('  ERROR:', e)
-              sys.exit(1)
-          PY
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
 
-      - name: Validate manifest.json
+      - name: Install Portage package and dev dependencies
         run: |
-          python3 - <<'PY'
-          import json, os, sys
-          m = json.load(open('manifest.json'))
-          errors = []
-          for s in m['skills']:
-              p = os.path.join(s['path'], 'SKILL.md')
-              if not os.path.exists(p):
-                  errors.append(f'manifest references missing skill file: {p}')
-              folder_name = os.path.basename(s['path'])
-              if folder_name != s['name']:
-                  errors.append(f'manifest skill name "{s["name"]}" != folder "{folder_name}"')
-          for ph in m['phases']:
-              for sname in ph['skills']:
-                  if not any(s['name'] == sname for s in m['skills']):
-                      errors.append(f'phase {ph["id"]} references unknown skill: {sname}')
-          if errors:
-              for e in errors: print('  ERROR:', e)
-              sys.exit(1)
-          print(f'manifest.json OK — {len(m["skills"])} skills across {len(m["phases"])} phases')
-          PY
+          pip install -e . pytest gitleaks yamllint python-frontmatter pyyaml pydantic
 
-      - name: Check internal link integrity
-        run: |
-          python3 - <<'PY'
-          import os, re, sys
-          link_re = re.compile(r'\]\(([^)]+\.(?:md|yaml|json|tf))\)')
-          errors = []
-          for root, _, files in os.walk('.'):
-              if '.git' in root: continue
-              for f in files:
-                  if not f.endswith('.md'): continue
-                  p = os.path.join(root, f)
-                  body = open(p).read()
-                  for m in link_re.finditer(body):
-                      target = m.group(1)
-                      if target.startswith('http'): continue
-                      if target.startswith('#'): continue
-                      rel = os.path.normpath(os.path.join(os.path.dirname(p), target))
-                      if not os.path.exists(rel):
-                          errors.append(f'{p} -> {target} (resolved {rel}) MISSING')
-          if errors:
-              for e in errors: print('  ERROR:', e)
-              sys.exit(1)
-          print('all internal links resolve')
-          PY
+      - name: Run Portage Structure & LFF Validator
+        run: portage-validate --repo-root .
 
-      - name: Check no banned tokens leaked
-        run: |
-          # Hard-fail on common accidentally-committed strings.
-          # Customize this list as the project matures.
-          if grep -rnE 'AKIA[0-9A-Z]{16}|aws_secret_access_key\s*=\s*[A-Za-z0-9/+=]{40}|BEGIN (RSA|OPENSSH) PRIVATE KEY|password\s*[:=]\s*[A-Za-z0-9_\-!@#\$%^&\*]{6,}' \
-                  --include='*.md' --include='*.json' --include='*.yaml' --include='*.yml' --include='*.tf' .; then
-            echo 'Possible secret leak detected in markdown / config files'
-            exit 1
-          fi
-          echo 'no banned tokens found'
+      - name: Run Unit & Smoke Tests
+        run: pytest tools/egress-estimator/
 
-      - name: Verify CHANGELOG mentions current version
-        run: |
-          grep -q '^## \[' CHANGELOG.md || (echo 'CHANGELOG.md missing version header'; exit 1)
-          echo 'CHANGELOG.md OK'
+      - name: Validate manifest.json & internal links
+        run: portage-validate --check-manifest --check-links
+
+      - name: Secret scanning (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

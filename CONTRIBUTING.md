@@ -24,10 +24,11 @@ Concretely, a passing skill has:
 
 1. A `SKILL.md` with valid frontmatter (`name`, `description`).
 2. A `description` field that triggers the skill on the right kinds of requests and *does not* trigger it on the wrong kinds. Test this with five real-sounding prompts before submitting.
-3. Explicit `Inputs`, `Procedure`, `Outputs`, `Escalation triggers`, and `Validation` sections.
-4. Real commands. Not pseudocode. Not "run the appropriate `gcloud` command". The actual command, with the actual flags, that the SRE should run.
-5. At least one worked example showing input → output.
-6. A list of failure modes the skill has seen in the wild and how it handles each.
+3. Explicit `Purpose`, `When to use this skill`, `Prerequisites`, `Procedure`, `Decision points`, `Outputs / Deliverables`, `Validation`, `Escalation triggers`, `Common pitfalls`, and `References` sections (these exactly 10 mandatory H2 headings are checked by `portage-validate`).
+4. **Deny-by-Default HITL Confirmation**: Any destructive cloud command or data mutation (`dms start-replication-task`, `gcloud sql instances promote`, `terraform apply`) must require an interactive confirmation gate displaying the exact command, target environment, and cost impact before running.
+5. Real commands. Not pseudocode. Not "run the appropriate `gcloud` command". The actual command, with the actual flags, that the SRE should run.
+6. At least one worked example showing input → output.
+7. A list of failure modes the skill has seen in the wild and how it handles each (`Common pitfalls`). All new practitioner entries added to `reference/lessons-from-the-field.md` must be cross-referenced by at least one skill.
 
 ## Style
 

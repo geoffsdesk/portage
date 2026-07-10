@@ -157,7 +157,7 @@ The orchestrator escalates (asks the human) on:
 - **Big-bang because the customer asked.** Confirm twice. Big-bang failure modes are not recoverable in many data scenarios.
 - **Treating the GKE Autopilot decision as "small".** It changes the security model, the resource model, and the available admission controllers. Surface it explicitly.
 - **Forgetting the source-side cleanup.** EKS decommissioning is part of the migration, not an afterthought. The orchestrator owns the `decommission-plan.md` artifact.
-- **Read [reference/lessons-from-the-field.md](../../reference/lessons-from-the-field.md) before starting any phase.** The severity-3 entries are the items that have caused real outages or unbudgeted financial damage in past migrations. Surface relevant lessons in `00-orchestrator-state.json` decisions.
+- **Read [reference/lessons-from-the-field.md](../../reference/lessons-from-the-field.md) before starting any phase.** The severity-3 entries are the items that have caused real outages or unbudgeted financial damage in past migrations. Surface relevant lessons in `00-orchestrator-state.json` decisions. Evaluate single-cluster spanning across clouds (`[LFF-24]`) or multi-cluster connected via NATS/CockroachDB (`[LFF-25]`) depending on topology. See [LFF-24](../../reference/lessons-from-the-field.md#lff-24--tamr-literally-spanned-a-single-cluster-across-aws-and-gcp-for-the-cutover) and [LFF-25](../../reference/lessons-from-the-field.md#lff-25--form3-runs-three-independent-clusters-connected-by-nats-jetstream-and-cockroachdb).
 
 ## References
 

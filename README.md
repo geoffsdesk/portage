@@ -42,6 +42,8 @@ portage/
 │   ├── traffic-cutover/           # Phase 4: weighted DNS, blue/green
 │   ├── rollback-playbook/         # Phase 4: bail-out paths
 │   └── post-migration-ops/        # Phase 5: day-2, FinOps, hardening
+├── tools/                     # Production engineering utilities
+│   └── egress-estimator/          # Cross-cloud co-existence egress modeling (LFF-01)
 ├── runbooks/                  # Phase-by-phase human-readable runbooks
 ├── reference/
 │   ├── sources.md             # Canonical external references per skill
@@ -66,11 +68,15 @@ portage/
 Portage skills are plain folders with a `SKILL.md` and (optionally) helper assets. To use them with Gemini CLI:
 
 ```bash
-git clone https://github.com/rohinikrishna05/portage.git ~/.gemini/skills/portage
+git clone https://github.com/geoffsdesk/portage.git ~/.gemini/skills/portage
 ```
 To use them with Antigravity:
 ```bash
-git clone https://github.com/rohinikrishna05/portage.git <workspace-root>/.agents/skills/portage/
+git clone https://github.com/geoffsdesk/portage.git <workspace-root>/.agents/skills/portage/
+```
+To use them with Claude Code / Cowork:
+```bash
+git clone https://github.com/geoffsdesk/portage.git ~/.claude/skills/portage
 ```
 
 Or vendor the skills you want into your team's plugin marketplace. See [docs/architecture.md](docs/architecture.md) for the skill loader contract.
@@ -109,6 +115,10 @@ Every skill produces a deliverable: a discovery report, a Terraform plan, a tran
 ## Contributing
 
 Portage is intentionally small. Fourteen skills, written carefully, beat fifty skills that drift. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR. The bar for new skills is *can two SREs at two different companies execute this end-to-end without our help*.
+
+## Authors & Contributors
+
+Portage is co-authored by **Geoff Anderson** (`@geoffsdesk`) and **Rohini Rajaram** (`@rohinikrishna05`). For the complete list of authors and contributions, see [AUTHORS.md](AUTHORS.md).
 
 ## License
 

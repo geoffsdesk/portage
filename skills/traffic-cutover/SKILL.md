@@ -211,6 +211,7 @@ For each cut-over workload:
 - **JVM workloads cache DNS forever by default.** Setting the LB DNS TTL to 60s does nothing if the JVM caches the first answer for the process lifetime. Mandate `networkaddress.cache.ttl=5` (or similar) per-workload before any DNS-weighted ramp. See [LFF-03](../../reference/lessons-from-the-field.md#lff-03--default-jvm-caches-dns-forever-aws-sdk-for-java-recommends-a-5-second-ttl).
 - **Long-lived WebSocket / IoT clients ignore DNS TTLs entirely.** Plan a forwarding tail on the source side for 30+ days post-cutover for any workload with persistent client connections from heterogeneous fleets. See [LFF-04](../../reference/lessons-from-the-field.md#lff-04--long-lived-websocket-clients-on-heterogeneous-devices-ignore-dns-ttls).
 - **gRPC pins to original pods**; `MaxConnectionAge` must be set on the server side to force periodic re-resolution. Treat gRPC and websocket workloads as a separate cutover cohort. See [LFF-05](../../reference/lessons-from-the-field.md#lff-05--grpc-and-round-robin-client-policy-can-syn-flood-targets-during-a-rollover).
+- **Endpoints migration requires cross-cluster node whitelisting.** Service-by-service migration via Endpoints requires whitelisting node public/private IPs across both clusters. See [LFF-23](../../reference/lessons-from-the-field.md#lff-23--service-by-service-migration-via-endpoints-requires-whitelisting-node-public-ips-across-both-clusters).
 
 ## References
 
